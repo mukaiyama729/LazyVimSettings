@@ -21,14 +21,14 @@ return {
     end,
     ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
     ---@type Provider
-    provider = "copilot", -- The provider used in Aider mode or in the planning phase of Cursor Planning Mode
+    provider = "gemini", -- The provider used in Aider mode or in the planning phase of Cursor Planning Mode
     ---@alias Mode "agentic" | "legacy"
     ---@type Mode
     mode = "agentic", -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
     -- WARNING: Since auto-suggestions are a high-frequency operation and therefore expensive,
     -- currently designating it as `copilot` provider is dangerous because: https://github.com/yetone/avante.nvim/issues/1048
     -- Of course, you can reduce the request frequency by increasing `suggestion.debounce`.
-    auto_suggestions_provider = "copilot",
+    auto_suggestions_provider = "gemini",
     providers = {
       copilot = {
         endpoint = "https://api.githubcopilot.com", -- The endpoint for the Copilot API
@@ -39,6 +39,27 @@ return {
           max_completions = 8192,
           reasoning_effort = "high",
         }, -- Additional request body parameters
+      },
+      gemini = {
+        endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
+        model = "gemini-2.5-pro", --"gemini-2.0-flash-thinking-exp-01-21", -- your desired model (or use gpt-4o, etc.)
+        timeout = 50000, -- timeout in milliseconds
+        extra_request_body = {
+          temperature = 0, -- adjust if needed
+          max_completion_tokens = 8192,
+          reasoning_effort = "high",
+        },
+      },
+      openai = {
+        endpoint = "https://api.openai.com/v1",
+        model = "gpt-4.1-2025-04-14", -- your desired model (or use gpt-4o, etc.)
+        timeout = 500000, -- timeout in milliseconds
+        extra_request_body = {
+          temperature = 0, -- adjust if needed
+          max_completion_tokens = 8192,
+          reasoning_effort = "high",
+        },
+        disable_tools = true,
       },
     },
     ---Specify the special dual_boost mode
@@ -52,8 +73,8 @@ return {
     ---Note: This is an experimental feature and may not work as expected.
     dual_boost = {
       enabled = true,
-      first_provider = "copilot",
-      second_provider = "copilot",
+      first_provider = "gemini",
+      second_provider = "openai",
       prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
       timeout = 60000, -- Timeout in milliseconds
     },

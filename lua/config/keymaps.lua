@@ -7,5 +7,10 @@ local opts = { noremap = true, silent = true }
 --ビジュアルモード
 vim.keymap.set("v", "<C-k>", "5k", opts)
 vim.keymap.set("v", "<C-j>", "5j", opts)
+
+--  ノーマルモード
 vim.keymap.set("n", "<C-k>", "5k", opts)
 vim.keymap.set("n", "<C-j>", "5j", opts)
+
+-- ターミナルモード
+vim.keymap.set("t", "<leader><Esc>", [[<C-\><C-n>]], { noremap = true, silent = true })

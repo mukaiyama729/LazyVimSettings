@@ -4,9 +4,9 @@ return {
   priority = 1000,
   opts = {
     style = "night",
-    transparent = true,
+    transparent = false,
     styles = {
-      sidebars = "transparent",
+      sidebars = "normal",
       floats = "normal",
     },
     on_highlights = function(hl, c)
